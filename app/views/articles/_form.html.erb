@@ -21,11 +21,11 @@
         </div>
         <p>
             <%= form.label :body, "Corpo" %><br>
-            <%= form.text_field :body, class:"form-control" %>
+            <%= form.text_area :body, class:"form-control" %>
         </p>
-         <p>
-            <%= form.label :tags, "tags" %><br>
-            <%= form.text_field :tags, class:"form-control" %>
+        <p>
+            <%= form.label :tag, "tag" %><br>
+            <%= form.text_field :tag, class:"form-control", value:"" %>
         </p>
         
         <p>

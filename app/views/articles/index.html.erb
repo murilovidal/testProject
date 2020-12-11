@@ -1,3 +1,4 @@
+<% if current_user.role == "admin"%>
 <%= render '/admin/navbar'%>
 Administrar Notícias
 <div class="container">
@@ -9,6 +10,7 @@ Administrar Notícias
                 <th scope="col">#</th>
                 <th scope="col">Título</th>
                 <th scope="col">Corpo</th>
+                <th scope="col">tags</th>
                 <th scope="col"><a class="btn btn-primary" href=<%= new_article_path %> role="button">Nova Notícia</a></th>
             </tr>
         </thead>
@@ -18,12 +20,28 @@ Administrar Notícias
                     <td><%= article.id%></td>
                     <td><%= article.title%></td>
                     <td><%= article.body%></td>
+                    <td>
+                   
+                            
+                            <% article.tags.each do |tag| %>
+                                <%= tag.try(:tag) %>
+                            <% end %>
+                            
+                       
+                    </td>
                     <td><a class="btn btn-warning" href=<%= edit_article_path(article) %> role="button">Editar</a></td>
                     <td><a class="btn btn-info" href=<%= article_path(article) %> role="button">Mostrar</a></td>
-                    <td><a data-confirm="Tem certeza?" data-method="delete" href=<%= article_path(book) %> class="btn btn-danger" role="button">Remover</a></td>
+                    <td><a data-confirm="Tem certeza?" data-method="delete" href=<%= article_path(article) %> class="btn btn-danger" role="button">Remover</a></td>
                 </tr>
         <% end %>
         </tbody>  
     </table>
   <%= link_to 'Voltar', admin_path, class:"btn btn-primary mb-2"%>
 </div>
+<% else %>
+
+  <script type="text/javascript">
+    window.location.href="/home"
+  </script>
+
+<% end %>
