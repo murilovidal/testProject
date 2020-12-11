@@ -4,6 +4,12 @@ class UsersController < ApplicationController
         @user = User.new
     end
 
+    def index
+        unless authorized?()
+            @users = User.all
+        end    
+    end
+
     def create
         @user = User.new(user_params)
 
@@ -20,4 +26,6 @@ class UsersController < ApplicationController
     def user_params
         params.require(:user).permit(:email, :name, :password, :password_confirmation)
     end
+
+    
 end

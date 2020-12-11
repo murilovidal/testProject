@@ -1,0 +1,38 @@
+<div class="container">
+    <%= form_with model: @article, local: true do |form| %>
+    
+            <% if @article.errors.any? %>
+                <div id="error_explanation">
+                    <h2>
+                        Corrija <%= pluralize(@article.errors.count, "erro") %> antes de prossegir com o armazenamento desta notícia.
+                    </h2>
+                    <ul>
+                        <% @article.errors.full_messages.each do |msg| %>
+                            <li><%= msg %></li>
+                        <% end %>
+                    </ul>
+                </div>
+            <% end %>
+        <div class="form-group">
+        <p>
+            <%= form.label :title, "Título" %><br>
+            <%= form.text_field :title, class:"form-control" %>
+        </p>
+        </div>
+        <p>
+            <%= form.label :body, "Corpo" %><br>
+            <%= form.text_field :body, class:"form-control" %>
+        </p>
+         <p>
+            <%= form.label :tags, "tags" %><br>
+            <%= form.text_field :tags, class:"form-control" %>
+        </p>
+        
+        <p>
+            <%= form.submit "Salvar", class:"btn btn-success" %>
+        </p>
+        
+    <% end %>
+    
+    </form>
+</div>

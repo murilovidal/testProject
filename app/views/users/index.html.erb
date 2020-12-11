@@ -1,0 +1,35 @@
+<%= render '/admin/navbar'%>
+Administrar usuários
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Email</th>
+                <th scope="col">Nome</th>
+                <th scope="col" colspan="2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @users.each do |user| %>
+                <tr>
+                    <td><%= user.id%></td>
+                    <td><%= user.email%></td>
+                    <td><%= user.name%></td>
+                    <% if user.role == 'admin' %>
+                        <td><button type="button" class="btn btn-success btn-sm active" >Admin</button></td>
+                    <% else%>
+                        <td><button type="button" class="btn btn-warning btn-sm" >User</button></td>
+                    <% end %>
+                    <td><a data-confirm="Tem certeza?" data-method="delete" href=<%= user_path(user) %> class="btn btn-danger" role="button">Remover</a></td>
+                </tr>
+                
+        <% end %>
+        </tbody>  
+    </table>
+    </div>
+  </div>
+  <%= link_to 'Voltar', admin_path, class:"btn btn-primary mb-2"%>
+</div>

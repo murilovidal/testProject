@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
 
   def destroy    
     session[:user_id] = nil         
-    redirect_to '/welcome', notice: "Saiu."
+    redirect_to '/', notice: "Saiu."
   end
 
   def welcome

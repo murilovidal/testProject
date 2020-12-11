@@ -1,0 +1,20 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Título</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @videos.each do |video| %>
+            <tr>
+                <td><%= video.id%></td>
+                <td><%= video.title%></td>
+                <td><%= article.description%></td>
+                <td><a class="btn btn-success" href=<<%= article.url%> role="button">Ver</a></td>
+            </tr>    
+        <% end %>
+    </tbody>  
+</table>
