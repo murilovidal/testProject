@@ -12,6 +12,19 @@
                         src=<%= video.url%>> 
                     </iframe>
                     <p class="lead"> <%= video.description%></p>
+                    tags:
+                    <% video.tags.each do |tag| %>
+                        <button type="button" class="btn btn-info btn-sm" disabled><%= tag.try(:tag) %></button>            
+                    <% end %>
+                    <hr class="my-4">          
+                <p class="lead">Comentários:</p>
+                    <% video.comments.each do |comment| %>
+                        <% comment.users.each do |user| %>
+                                    <%= user.try(:name) %>
+                                <% end %>:
+                        <%= comment.try(:comment) %><br>
+                    <% end %>
+                    </h6>
                     <a class="btn btn-success" href=<%= comment_video_path(video) %> role="button">Comentar</a>
             </div>
         </div>

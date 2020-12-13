@@ -1,10 +1,11 @@
 <%= render '/admin/navbar'%>
-    Administrar Notícias<br>
+    <h3>Administrar Notícias</h3>
     <%= link_to 'Voltar', admin_path, class:"btn btn-primary mb-2"%>
     <div class="container">
         <div class="row">
         
             <div class="col-sm">
+            <a class="btn btn-success" href=<%= new_article_path %> role="button">Nova Notícia</a>
             <table class="table">
                 <thead>
                     <tr>
@@ -12,7 +13,7 @@
                         <th scope="col">Título</th>
                         <th scope="col">Corpo</th>
                         <th scope="col">tags</th>
-                        <th scope="col"><a class="btn btn-primary" href=<%= new_article_path %> role="button">Nova Notícia</a></th>
+                        <th scope="col">Opções</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,9 +27,9 @@
                                     <%= tag.try(:tag) %>
                                 <% end %>
                             </td>
-                            <td><a class="btn btn-warning" href=<%= edit_article_path(article) %> role="button">Editar</a></td>
-                            <td><a class="btn btn-info" href=<%= article_path(article) %> role="button">Mostrar</a></td>
-                            <td><a data-confirm="Tem certeza?" data-method="delete" href=<%= article_path(article) %> class="btn btn-danger" role="button">Remover</a></td>
+                            <td><a class="btn btn-warning btn-sm" href=<%= edit_article_path(article) %> role="button">Editar</a>
+                            <a class="btn btn-info btn-sm" href=<%= article_path(article) %> role="button">Mostrar</a>
+                            <a data-confirm="Tem certeza?" data-method="delete" href=<%= article_path(article) %> class="btn btn-danger btn-sm" role="button">Remover</a></td>
                         </tr>
                 <% end %>
                 </tbody>  

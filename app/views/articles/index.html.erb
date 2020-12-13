@@ -2,12 +2,15 @@
     <%= render 'index_admin' %>
 <% else %>
     <%= render '/home/navbar'%>
-    <%= form_with url: articles_url, local: true, method: :get do |form| %>
-        <%= form.text_field :query, class:"form-control",value: params[:query]  %>
-        <%= form.submit "Pesquisar", class:"btn btn-success" %>
+    <br>
+    <%= form_with url: articles_url, class:"form-inline", local: true, method: :get do |form| %>
+        <%= form.text_field :query, class:"form-control mr-sm-2",value: params[:query]  %>
+        <%= form.submit "Pesquisar", class:"btn btn-outline-success my-2 my-sm-0" %>
     <% end %>
+    
+    <br>
     <% flash.each do |type, msg| %>
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-info" role="alert">
         <%= msg %>
         </div>
     <% end %>
@@ -16,6 +19,20 @@
             <div class="container">
                 <h3 class="display-5"><a href=<%= article_path(article)%>><%= article.title%></h1></a>
                 <p class="lead"><%= article.body[0,300]%>...</p>
+                tags: <% article.tags.each do |tag| %>
+                    <button type="button" class="btn btn-info btn-sm" disabled><%= tag.try(:tag) %></button>            
+                <% end %>
+                <hr class="my-4">
+                
+                <p class="lead">Comentários:</p>
+                <h6 class="display-7">
+                <% article.comments.each do |comment| %>
+                        <% comment.users.each do |user| %>
+                                    <%= user.try(:name) %>
+                                <% end %>:
+                        <%= comment.try(:comment) %><br>
+                    <% end %>
+                </h6>
                 <a class="btn btn-success btn-sm" href=<%= article_path(article) %> role="button">Ver mais</a>
                 <a class="btn btn-success btn-sm" href=<%= comment_article_path(article) %> role="button">Comentar</a>
             </div>

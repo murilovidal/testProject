@@ -6,7 +6,10 @@ class ArticlesController < ApplicationController
             if @articles == nil
                 @articles = Article.all
                 flash.alert =  "Nada encontrado. Mostrando todas as notícias"
+            else
+                flash.alert = "#{@articles.count} notícias encontradas."
             end
+
         else
             @articles = Article.all
         end
@@ -43,12 +46,28 @@ class ArticlesController < ApplicationController
             end
 
             if @article.save
-                redirect_to '/article'
+                redirect_to '/articles'
             else
                 render 'new'
             end
         end
     end 
+
+    def edit
+        #Falta gerenciamento de tags na edição
+        @article = Article.find(params[:id])
+    end
+
+    def update
+        #Falta gerenciamento de tags
+        @article = Article.find(params[:id])
+
+        if @article.update(title: article_params[:title], body: article_params[:body])
+            redirect_to @article
+        else
+            render 'edit'
+        end
+    end
 
     def destroy
         unless authorized?()
@@ -64,8 +83,9 @@ class ArticlesController < ApplicationController
 
     def save_comment
         @article = Article.find(params[:id])
+        @user = current_user
         @comment = Comment.new(comment: params[:comment])
-        @comment.save
+        @user.comments << @comment
         @article.comments << @comment
         redirect_to articles_path      
     end

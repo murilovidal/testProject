@@ -1,10 +1,12 @@
 <div class="container">
     <p>
-        <h2><%= @article.title %><br></h2>
-        <%= @article.body %><br>
+        <h2><%= @video.title %><br></h2>
+        <iframe width="420" height="315"
+            src=<%= @video.url%>> 
+         </iframe>
     </p>
      
-  <%= form_with url: save_comment_article_url, method: :post do |form| %>
+  <%= form_with url: save_comment_video_url, method: :post do |form| %>
            
         <div class="form-group">
        

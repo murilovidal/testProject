@@ -39,8 +39,8 @@ ActiveRecord::Schema.define(version: 2020_12_12_130039) do
   end
 
   create_table "comments_users", id: false, force: :cascade do |t|
-    t.bigint "comment_id", null: false
     t.bigint "user_id", null: false
+    t.bigint "comment_id", null: false
   end
 
   create_table "comments_videos", id: false, force: :cascade do |t|

@@ -32,7 +32,7 @@ class VideosController < ApplicationController
             end
 
             if @video.save
-                redirect_to '/video'
+                redirect_to '/videos'
             else
                 render 'new'
             end
@@ -51,16 +51,16 @@ class VideosController < ApplicationController
     
     def comment
         @video= Video.find(params[:id])
-        render 'comment'
     end
     
-    # def save_comment
-    #     @article = Article.find(params[:id])
-    #     @comment = Comment.new(comment: params[:comment])
-    #     @comment.save
-    #     @article.comments << @comment
-    #     redirect_to articles_path      
-    # end
+    def save_comment
+        @video = Video.find(params[:id])
+        @user = current_user
+        @comment = Comment.new(comment: params[:comment])
+        @user.comments << @comment
+        @video.comments << @comment
+        redirect_to videos_path      
+    end
     
 
     
