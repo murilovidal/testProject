@@ -2,6 +2,8 @@ class Article < ApplicationRecord
     validates :title, :body,  presence: true
     has_and_belongs_to_many :tags, autosave: true
     has_and_belongs_to_many :comments, autosave: true
+    default_scope { order(created_at: :desc) }
+
 
     def self.search(query)
         if query

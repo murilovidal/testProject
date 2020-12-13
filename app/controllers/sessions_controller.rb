@@ -8,18 +8,18 @@ class SessionsController < ApplicationController
 
     if @user && @user.authenticate(params[:password]) && @user.role != "admin"
        session[:user_id] = @user.id
-       redirect_to '/home'
+       redirect_to '/articles'
     elsif @user && @user.authenticate(params[:password]) && @user.role == "admin"
       session[:user_id] = @user.id
       redirect_to '/admin'
     else
-       redirect_to '/', notice: "Email ou senha inválido."
+       redirect_to '/login', notice: "Email ou senha inválido."
     end
   end
 
   def destroy    
     session[:user_id] = nil         
-    redirect_to '/', notice: "Saiu."
+    redirect_to '/login', notice: "Saiu."
   end
 
   def welcome
