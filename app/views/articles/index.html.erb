@@ -1,47 +1,24 @@
 <% if current_user.role == "admin"%>
-<%= render '/admin/navbar'%>
-Administrar Notícias
-<div class="container">
-  <div class="row">
-    <div class="col-sm">
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Título</th>
-                <th scope="col">Corpo</th>
-                <th scope="col">tags</th>
-                <th scope="col"><a class="btn btn-primary" href=<%= new_article_path %> role="button">Nova Notícia</a></th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @articles.each do |article| %>
-                <tr>
-                    <td><%= article.id%></td>
-                    <td><%= article.title%></td>
-                    <td><%= article.body%></td>
-                    <td>
-                   
-                            
-                            <% article.tags.each do |tag| %>
-                                <%= tag.try(:tag) %>
-                            <% end %>
-                            
-                       
-                    </td>
-                    <td><a class="btn btn-warning" href=<%= edit_article_path(article) %> role="button">Editar</a></td>
-                    <td><a class="btn btn-info" href=<%= article_path(article) %> role="button">Mostrar</a></td>
-                    <td><a data-confirm="Tem certeza?" data-method="delete" href=<%= article_path(article) %> class="btn btn-danger" role="button">Remover</a></td>
-                </tr>
-        <% end %>
-        </tbody>  
-    </table>
-  <%= link_to 'Voltar', admin_path, class:"btn btn-primary mb-2"%>
-</div>
+    <%= render 'index_admin' %>
 <% else %>
-
-  <script type="text/javascript">
-    window.location.href="/home"
-  </script>
-
+    <%= render '/home/navbar'%>
+    <%= form_with url: articles_url, local: true, method: :get do |form| %>
+        <%= form.text_field :query, class:"form-control",value: params[:query]  %>
+        <%= form.submit "Pesquisar", class:"btn btn-success" %>
+    <% end %>
+    <% flash.each do |type, msg| %>
+        <div class="alert alert-warning" role="alert">
+        <%= msg %>
+        </div>
+    <% end %>
+    <% @articles.each do |article| %>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h3 class="display-5"><a href=<%= article_path(article)%>><%= article.title%></h1></a>
+                <p class="lead"><%= article.body[0,300]%>...</p>
+                <a class="btn btn-success btn-sm" href=<%= article_path(article) %> role="button">Ver mais</a>
+                <a class="btn btn-success btn-sm" href=<%= comment_article_path(article) %> role="button">Comentar</a>
+            </div>
+        </div>
+    <% end %>
 <% end %>

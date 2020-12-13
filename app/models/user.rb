@@ -1,8 +1,7 @@
 class User < ApplicationRecord
   has_secure_password
 
-  validates :email, presence: true, uniqueness: true
+  has_and_belongs_to_many :comments, autosave: true
   validates :name, presence: true
-  validates :password, presence: true
-  validates :password, confirmation: { case_sensitive: true }
-end
+  validates :email, presence: true, uniqueness: true
+ end

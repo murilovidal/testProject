@@ -1,5 +1,6 @@
 <%= render '/admin/navbar'%>
-Administrar usuários
+Administrar usuários<br>
+<%= link_to 'Voltar', admin_path, class:"btn btn-primary mb-2"%>
 <div class="container">
   <div class="row">
     <div class="col-sm">
@@ -13,23 +14,35 @@ Administrar usuários
             </tr>
         </thead>
         <tbody>
+       
             <% @users.each do |user| %>
                 <tr>
                     <td><%= user.id%></td>
                     <td><%= user.email%></td>
                     <td><%= user.name%></td>
                     <% if user.role == 'admin' %>
-                        <td><button type="button" class="btn btn-success btn-sm active" >Admin</button></td>
+                        <td><a data-confirm="Tem certeza que quer remover os direitos Admin deste usuário?" class="btn btn-success btn-sm" href=<%=edit_user_path(user) %> >Admin</a></td>
                     <% else%>
-                        <td><button type="button" class="btn btn-warning btn-sm" >User</button></td>
+                        <td><a class="btn btn-warning btn-sm" href=<%=edit_user_path(user) %> >User</button></td>
                     <% end %>
                     <td><a data-confirm="Tem certeza?" data-method="delete" href=<%= user_path(user) %> class="btn btn-danger" role="button">Remover</a></td>
                 </tr>
-                
+                 <% if @user.errors.any? %>
+                <div id="error_explanation">
+                    <h2>
+                        Corrija <%= pluralize(@user.errors.count, "erro") %> antes de prossegir com o armazenamento deste livro.
+                    </h2>
+                    <ul>
+                        <% @user.errors.full_messages.each do |msg| %>
+                            <li><%= msg %></li>
+                        <% end %>
+                    </ul>
+                </div>
+            <% end %>
         <% end %>
         </tbody>  
     </table>
     </div>
   </div>
-  <%= link_to 'Voltar', admin_path, class:"btn btn-primary mb-2"%>
+
 </div>
