@@ -1,8 +1,5 @@
-<%= render '/admin/navbar'%>
-<div class="container">    
-    <h1>Novo vídeo</h1>
+<h1>Novo Vídeo</h1>
 
-    <%= render 'form' %>
+<%= render 'form', video: @video %>
 
-    <%= link_to 'Voltar', articles_path, class:"btn btn-primary mb-2" %>
-</div>
+<%= link_to 'Voltar', videos_path, class:'btn btn-primary btn-sm' %>

@@ -1,0 +1,5 @@
+<li class="list-group-item" id="comment_<%= @comment.id%>"><%=@comment.user.email%><p>"<%=@comment.body%>"</p>
+    <% if user_admin? %>
+        <%= link_to 'Remover Comentário', deletevideocomment_url(@comment.id), method: :delete, local: false, remote: true, data: { confirm: 'Tem certeza?' } %>
+    <% end %>
+</li>                     

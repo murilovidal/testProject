@@ -1,24 +1,17 @@
 Rails.application.routes.draw do
-  get 'sessions/destroy'
-  get 'login', to: 'sessions#new'
-  post 'login', to: 'sessions#create'
-  delete 'logout', to: 'sessions#destroy', as: 'logout'
-  get 'admin/index'
+  devise_for :users
+  root to: 'articles#index'
+  resources :articles, :videos
+  get '/admin', to: 'users#index', as: 'admin'
+  get '/video/:id/comment', to: 'videos#comment', as: 'comment_video'
+  post '/video/:id/comment', to: 'videos#save_comment', as: 'save_comment_video'
+  match '/videocomment/', to: 'videos#destroy_comment', via: [:delete]
+  match '/videocomment/:id', to: 'videos#destroy_comment', as: 'deletevideocomment', via: [:delete],
+                             defaults: { format: 'js' }
 
-  get 'home', to: 'home#index'
-  get 'admin', to: 'admin#index'
-  
-  get '/articles/:id/comment', to: 'articles#comment', as: 'comment_article'
-  post '/articles/:id/comment', to: 'articles#save_comment', as: 'save_comment_article'
-  
-  get '/videos/:id/comment', to: 'videos#comment', as: 'comment_video'
-  post '/videos/:id/comment', to: 'videos#save_comment', as: 'save_comment_video'
-
-  resources :articles
-  resources :videos
-  resources :users
-  
-  root 'welcome#index'
-
+  get '/article/:id/comment', to: 'articles#show_comment', as: 'comment_article'
+  post '/article/:id/comment', to: 'articles#save_comment', as: 'save_comment_article'
+  match '/articlecomment/:id', to: 'articles#destroy_comment', as: 'deletearticlecomment', via: [:delete],
+                               defaults: { format: 'js' }
+  match '/admin/users/:id', to: 'users#toggle_admin', via: [:post], as: 'toggleadmin', defaults: { format: 'js' }
 end
-

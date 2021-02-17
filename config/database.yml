@@ -20,20 +20,18 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: localhost
-  username: murilo
-  password: murilo
-
 
 development:
   <<: *default
-  database: rubynews_development
+  database: newsruby_dev
+  username: rubynews
+  password: password1
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
-  # the same name as the operating system user that initialized the database.
-  #username: rubynews
+  # the same name as the operating system user running Rails.
+  #username: newsRuby
 
   # The password associated with the postgres role (username).
   #password:
@@ -61,29 +59,32 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: rubynews_test
+  database: newsruby_test
+  username: rubynews
+  password: password1
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
 #
-# Instead, provide the password as a unix environment variable when you boot
-# the app. Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
-# for a full rundown on how to provide these environment variables in a
-# production deployment.
-#
-# On Heroku and other platform providers, you may have a full connection URL
-# available as an environment variable. For example:
+# Instead, provide the password or a full connection URL as an environment
+# variable when you boot the app. For example:
 #
 #   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
 #
-# You can use this database configuration with:
+# If the connection URL is provided in the special DATABASE_URL environment
+# variable, Rails will automatically merge its configuration values on top of
+# the values provided in this file. Alternatively, you can specify a connection
+# URL environment variable explicitly:
 #
 #   production:
-#     url: <%= ENV['DATABASE_URL'] %>
+#     url: <%= ENV['MY_APP_DATABASE_URL'] %>
+#
+# Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
+# for a full overview on how database connection configuration can be specified.
 #
 production:
   <<: *default
-  database: rubynews_production
-  username: rubynews
-  password: <%= ENV['RUBYNEWS_DATABASE_PASSWORD'] %>
+  database: newsRuby_production
+  username: newsRuby
+  password: <%= ENV['NEWSRUBY_DATABASE_PASSWORD'] %>

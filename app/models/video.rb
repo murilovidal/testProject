@@ -1,5 +1,4 @@
 class Video < ApplicationRecord
-    validates :title, :url,  presence: true
-    has_and_belongs_to_many :tags, autosave: true
-    has_and_belongs_to_many :comments, autosave: true
+  has_many :comment_videos, dependent: :delete_all
+  validates :title, :url, :presence => true
 end

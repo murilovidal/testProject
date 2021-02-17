@@ -1,0 +1,2 @@
+document.querySelector('#comments_list_<%= @comment.video.id %>').insertAdjacentHTML('afterbegin', '<%= escape_javascript(render @comment) %>') ;
+document.querySelector('#comment_text_<%= @comment.video.id %>').value="" 

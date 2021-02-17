@@ -1,0 +1,7 @@
+<%= user.email %> - 
+    <% if user.admin %>
+      ADMIN - <%= link_to 'Revogar Admin', toggleadmin_url(user.id), method: :post, data: { confirm: 'Tem certeza?' }, local: false, remote: true, class:'btn btn-danger btn-sm' %>
+    <% else %>
+      Comum - <%= link_to 'Atribuir Admin', toggleadmin_url(user.id), method: :post, data: { confirm: 'Tem certeza?' }, local: false, remote: true, class:'btn btn-warning btn-sm' %>
+    <% end %>
+    

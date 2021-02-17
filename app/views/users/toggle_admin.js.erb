@@ -1,0 +1,3 @@
+var user = document.querySelector('#user_<%= @user.id %>')
+var li = document.createElement('li')
+user.innerHTML  = '<%= escape_javascript(render @user) %>'

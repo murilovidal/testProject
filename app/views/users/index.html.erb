@@ -1,48 +1,14 @@
-<%= render '/admin/navbar'%>
-Administrar usuários<br>
-<%= link_to 'Voltar', admin_path, class:"btn btn-primary mb-2"%>
-<div class="container">
-  <div class="row">
-    <div class="col-sm">
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Email</th>
-                <th scope="col">Nome</th>
-                <th scope="col" colspan="2"></th>
-            </tr>
-        </thead>
-        <tbody>
-       
-            <% @users.each do |user| %>
-                <tr>
-                    <td><%= user.id%></td>
-                    <td><%= user.email%></td>
-                    <td><%= user.name%></td>
-                    <% if user.role == 'admin' %>
-                        <td><a data-confirm="Tem certeza que quer remover os direitos Admin deste usuário?" class="btn btn-success btn-sm" href=<%=edit_user_path(user) %> >Admin</a></td>
-                    <% else%>
-                        <td><a class="btn btn-warning btn-sm" href=<%=edit_user_path(user) %> >User</button></td>
-                    <% end %>
-                    <td><a data-confirm="Tem certeza?" data-method="delete" href=<%= user_path(user) %> class="btn btn-danger" role="button">Remover</a></td>
-                </tr>
-                 <% if @user.errors.any? %>
-                <div id="error_explanation">
-                    <h2>
-                        Corrija <%= pluralize(@user.errors.count, "erro") %> antes de prossegir com o armazenamento deste livro.
-                    </h2>
-                    <ul>
-                        <% @user.errors.full_messages.each do |msg| %>
-                            <li><%= msg %></li>
-                        <% end %>
-                    </ul>
-                </div>
-            <% end %>
-        <% end %>
-        </tbody>  
-    </table>
-    </div>
-  </div>
+<h1>Usuários</h1>
 
-</div>
+<ul class="list-group" id="users_list">
+  <% @users.each do |user| %>
+    <li class="list-group-item" id="user_<%= user.id %>" ><%= user.email %> - 
+    <% if user.admin %>
+      ADMIN - <%= link_to 'Revogar Admin', toggleadmin_url(user.id), method: :post, data: { confirm: 'Tem certeza?' }, local: false, remote: true, class:'btn btn-danger btn-sm' %>
+    </li>
+    <% else %>
+      Comum - <%= link_to 'Atribuir Admin', toggleadmin_url(user.id), method: :post, data: { confirm: 'Tem certeza?' }, local: false, remote: true, class:'btn btn-warning btn-sm' %>
+    </li>
+    <% end %>
+<% end %>
+</ul>

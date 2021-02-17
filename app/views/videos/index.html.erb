@@ -1,32 +1,31 @@
-<% if current_user.role == "admin"%>
-    <%= render 'index_admin' %>
-<% else %>
-    <%= render '/home/navbar'%>
-    <% @videos.each do |video| %>
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h1 class="display-5"> <a href=<%= video_path(video)%>><%= video.title%></h1></a>
-                    <p class="lead"><%= video.description%></p>
-
-                    <iframe width="420" height="315"
-                        src=<%= video.url%>> 
-                    </iframe>
-                    <p class="lead"> <%= video.description%></p>
-                    tags:
-                    <% video.tags.each do |tag| %>
-                        <button type="button" class="btn btn-info btn-sm" disabled><%= tag.try(:tag) %></button>            
-                    <% end %>
-                    <hr class="my-4">          
-                <p class="lead">Comentários:</p>
-                    <% video.comments.each do |comment| %>
-                        <% comment.users.each do |user| %>
-                                    <%= user.try(:name) %>
-                                <% end %>:
-                        <%= comment.try(:comment) %><br>
-                    <% end %>
-                    </h6>
-                    <a class="btn btn-success" href=<%= comment_video_path(video) %> role="button">Comentar</a>
-            </div>
-        </div>
-    <% end %>
+<h1>Videos</h1>
+<% if user_admin? %>
+<%= link_to 'Novo Vídeo', new_video_path, class:'btn btn-success' %>
 <% end %>
+
+<% @videos.each do |video| %>
+  <div class='col-6 offset-3'>
+    <h3><%= video.title %></h3>
+    <iframe width="560" height="315" src='<%= video.url %>' frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
+    <% if user_admin? %>
+      <%= link_to 'Mostrar', video, class:'btn btn-success' %>
+      <%= link_to 'Editar', edit_video_path(video), class:'btn btn-warning' %>
+      <%= link_to 'Remover', video, method: :delete, data: { confirm: 'Tem certeza?' },class:'btn btn-danger' %>
+    <% end %>
+    <div id='comments'>
+      <h5>Comentários</h5>
+    <%= render 'form_comment', :video => video.id %>
+
+      <ul class="list-group" id="comments_list_<%= video.id %>">
+        <% video.comment_videos.reverse.each do |comment| %>
+          <li class="list-group-item" id="comment_<%= comment.id %>"><%= comment.user.email %>:<p>"<%= comment.body %>"</p>
+          <% if user_admin? %>
+            <%= link_to 'Remover Comentário', deletevideocomment_url(comment.id), method: :delete, local: false, remote: true, data: { confirm: 'Tem certeza?' } %>
+          <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+

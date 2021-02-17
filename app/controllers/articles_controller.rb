@@ -1,103 +1,99 @@
 class ArticlesController < ApplicationController
-    
-    def index
-        if params[:query]
-            @articles = Article.search(params[:query])
-            if @articles == nil
-                @articles = Article.all
-                flash.alert =  "Nada encontrado. Mostrando todas as notícias"
-            else
-                flash.alert = "#{@articles.count} notícias encontradas."
-            end
+  before_action :set_article, only: %i[show edit update destroy]
+  before_action :authenticate_user!
+  before_action :authenticate_admin!, only: %i[destroy edit update destroy_comment]
 
+  def index
+    @articles = Article.all
+  end
+
+  def show; end
+
+  def new
+    redirect_to articles_path unless current_user.admin
+
+    @article = Article.new
+  end
+
+  def edit
+    redirect_to articles_path unless current_user.admin
+  end
+
+  def create
+    @article = Article.new(article_params)
+
+    respond_to do |format|
+      if @article.save
+        format.html { redirect_to @article, notice: 'Artigo criado com sucesso.' }
+        format.json { render :show, status: :created, location: @article }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    if current_user.admin
+      respond_to do |format|
+        if @article.update(article_params)
+          format.html { redirect_to @article, notice: 'Artigo atualizado com sucesso.' }
+          format.json { render :show, status: :ok, location: @article }
         else
-            @articles = Article.all
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @article.errors, status: :unprocessable_entity }
         end
+      end
+    else
+      redirect_to articles_path
     end
+  end
 
-    def show
-        @article = Article.find(params[:id])
+  def destroy
+    if current_user.admin
+      @article.destroy
+      respond_to do |format|
+        format.html { redirect_to articles_url, notice: 'Artigo removido com sucesso.' }
+        format.json { head :no_content }
+      end
+    else
+      redirect_to articles_path
     end
+  end
 
-    def new
-        unless authorized?()
-            @article = Article.new
-            @tags = Tag.all
-        end
+  def save_comment
+    @user = current_user
+    @comment = @user.comment_articles.create(body: params["comment_text_#{params[:id]}".to_sym], article_id: params[:id])
+    respond_to do |format|
+      if @comment.save
+        format.html { redirect_to @article, notice: 'Comentário criado com sucesso.' }
+        format.js
+      else
+        format.html { render action: 'new' }
+        format.js
+      end
     end
+  end
 
-    def create
-        unless authorized?()
-            @article = Article.new()
-            
-            @article.title = article_params[:title]
-            @article.body = article_params[:body]
-
-            @tags = article_params[:tag]
-            @tags = @tags.gsub(/\s+/m, ' ').strip.split(" ")
-            
-            @tags.each do |tag|
-                if Tag.find_by(tag: tag)
-                    @tag = Tag.find_by(tag: tag)
-                    @article.tags << @tag
-                else
-                    @article.tags.build(tag: tag)  
-                end
-            end
-
-            if @article.save
-                redirect_to '/articles'
-            else
-                render 'new'
-            end
-        end
-    end 
-
-    def edit
-        #Falta gerenciamento de tags na edição
-        @article = Article.find(params[:id])
+  def destroy_comment
+    @comment = CommentArticle.find(params[:id])
+    @comment.destroy
+    respond_to do |format|
+      format.js {}
     end
+  end
 
-    def update
-        #Falta gerenciamento de tags
-        @article = Article.find(params[:id])
+  def show_comment
+    @comment = CommentArticle.find(params[:id])
+  end
 
-        if @article.update(title: article_params[:title], body: article_params[:body])
-            redirect_to @article
-        else
-            render 'edit'
-        end
-    end
+  private
 
-    def destroy
-        unless authorized?()
-            @article = Article.find(params[:id])
-            @article.delete  
-            redirect_to articles_path
-        end
-    end
+  def set_article
+    @article = Article.find(params[:id])
+  end
 
-    def comment
-        @article = Article.find(params[:id])
-    end
-
-    def save_comment
-        @article = Article.find(params[:id])
-        @user = current_user
-        @comment = Comment.new(comment: params[:comment])
-        @user.comments << @comment
-        @article.comments << @comment
-        redirect_to articles_path      
-    end
-    
-    def search
-        @articles = Article.search(params[:query])
-    end
-
-
-    private
-    def article_params
-        params.require(:article).permit(:title, :body, :tag, :comment, :query)
-    end
-       
+  def article_params
+    params.require(:article).permit(:title, :body)
+  end
 end

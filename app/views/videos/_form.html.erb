@@ -1,42 +1,27 @@
-<div class="container">
-    <%= form_with model: @video, local: true do |form| %>
-    
-            <% if @video.errors.any? %>
-                <div id="error_explanation">
-                    <h2>
-                        Corrija <%= pluralize(@video.errors.count, "erro") %> antes de prossegir com o armazenamento desta notícia.
-                    </h2>
-                    <ul>
-                        <% @video.errors.full_messages.each do |msg| %>
-                            <li><%= msg %></li>
-                        <% end %>
-                    </ul>
-                </div>
-            <% end %>
-        <div class="form-group">
-        <p>
-            <%= form.label :title, "Título" %><br>
-            <%= form.text_field :title, class:"form-control" %>
-        </p>
-        </div>
-        <p>
-            <%= form.label :url, "URL" %><br>
-            <%= form.text_field :url, class:"form-control" %>
-        </p>
-        <p>
-            <%= form.label :description, "Descrição" %><br>
-            <%= form.text_area :description, class:"form-control" %>
-        </p>    
-        <p>
-            <%= form.label :tag, "tag" %><br>
-            <%= form.text_field :tag, class:"form-control", value:"" %>
-        </p>
-        
-        <p>
-            <%= form.submit "Salvar", class:"btn btn-success" %>
-        </p>
-        
-    <% end %>
-    
-    </form>
-</div>
+<%= form_with(model: video) do |form| %>
+  <% if video.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(video.errors.count, "error") %> proíbem esse video de ser salvo:</h2>
+
+      <ul>
+        <% video.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :Título %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :URL %>
+    <%= form.text_field :url %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Salvar', class:'btn btn-success btn-sm' %>
+  </div>
+<% end %>

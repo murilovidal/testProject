@@ -1,28 +1,13 @@
-<%= render '/home/navbar'%>
+<p>
+  <strong>Título:</strong>
+  <%= @article.title %>
+</p>
 
-
- <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h3 class="display-5"><%= @article.title%></h1></a>
-                <p class="lead"><%= @article.body[0,300]%>...</p>
-                <hr class="my-4">
-                
-                <p class="lead">Comentários:</p>
-                <h6 class="display-7">
-                <% @article.comments.each do |comment| %>
-                        <% comment.users.each do |user| %>
-                                    <%= user.try(:name) %>
-                                <% end %>:
-                        <%= comment.try(:comment) %><br>
-                    <% end %>
-                </h6> 
-                <% @article.tags.each do |tag| %>
-                  <button type="button" class="btn btn-primary btn-sm" disabled><%= tag.try(:tag) %></button>            
-                <% end %>
-                <% if current_user.role == 'admin'%>
-                  <a class="btn btn-warning btn-sm" href=<%= comment_article_path(@article) %> role="button" disabled> Gerenciar comentários</a>
-                <% elsif %>
-                  <a class="btn btn-success btn-sm" href=<%= comment_article_path(@article) %> role="button">Comentar</a>
-                <% end %>
-            </div>
-        </div>
+<p>
+  <strong>Texto:</strong>
+  <%= @article.body %>
+</p>
+<% if user_admin? %>
+  <%= link_to 'Editar', edit_article_path(@article), class:'btn btn-warning btn-sm' %> 
+<% end %>
+<%= link_to 'Voltar', articles_path, class:'btn btn-primary btn-sm' %>

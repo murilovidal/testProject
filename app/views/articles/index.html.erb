@@ -1,41 +1,31 @@
-<% if current_user.role == "admin"%>
-    <%= render 'index_admin' %>
-<% else %>
-    <%= render '/home/navbar'%>
-    <br>
-    <%= form_with url: articles_url, class:"form-inline", local: true, method: :get do |form| %>
-        <%= form.text_field :query, class:"form-control mr-sm-2",value: params[:query]  %>
-        <%= form.submit "Pesquisar", class:"btn btn-outline-success my-2 my-sm-0" %>
+<h1>Artigos</h1>
+<% if user_admin? %>
+<%= link_to 'Novo Artigo', new_article_path, class:'btn btn-success'%>
+<% end %>
+
+<% @articles.each do |article| %>
+  <div class='col-10 offset-1'>
+    <h3><%= article.title %></h3>
+    <p><%= article.body %></p>
+    <% if user_admin? %>
+      <%= link_to 'Mostrar', article, class:'btn btn-success btn-sm' %>
+      <%= link_to 'Editar', edit_article_path(article), class:'btn btn-warning btn-sm' %>
+      <%= link_to 'Remover', article, method: :delete, data: { confirm: 'Tem certeza?' },class:'btn btn-danger btn-sm' %>
     <% end %>
     
-    <br>
-    <% flash.each do |type, msg| %>
-        <div class="alert alert-info" role="alert">
-        <%= msg %>
-        </div>
-    <% end %>
-    <% @articles.each do |article| %>
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h3 class="display-5"><a href=<%= article_path(article)%>><%= article.title%></h1></a>
-                <p class="lead"><%= article.body[0,300]%>...</p>
-                tags: <% article.tags.each do |tag| %>
-                    <button type="button" class="btn btn-info btn-sm" disabled><%= tag.try(:tag) %></button>            
-                <% end %>
-                <hr class="my-4">
-                
-                <p class="lead">Comentários:</p>
-                <h6 class="display-7">
-                <% article.comments.each do |comment| %>
-                        <% comment.users.each do |user| %>
-                                    <%= user.try(:name) %>
-                                <% end %>:
-                        <%= comment.try(:comment) %><br>
-                    <% end %>
-                </h6>
-                <a class="btn btn-success btn-sm" href=<%= article_path(article) %> role="button">Ver mais</a>
-                <a class="btn btn-success btn-sm" href=<%= comment_article_path(article) %> role="button">Comentar</a>
-            </div>
-        </div>
-    <% end %>
+    <div id='comments_<%= article.id %>'>
+      <h5>Comentários</h5>
+    <%= render 'form_comment', :article => article.id %>
+
+      <ul class="list-group" id="comments_list_<%= article.id %>">
+      <% article.comment_articles.reverse.each do |comment| %>
+        <li class="list-group-item" id="comment_<%= comment.id %>"><%= comment.user.email %>:<p>"<%= comment.body %>"</p>
+        <% if user_admin? %>
+          <%= link_to 'Remover Comentário', deletearticlecomment_url(comment.id), method: :delete, local: false, remote: true, data: { confirm: 'Tem certeza?' } %>
+        <% end %>
+        </li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
 <% end %>
